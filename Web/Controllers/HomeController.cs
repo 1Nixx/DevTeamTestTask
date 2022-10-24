@@ -14,7 +14,6 @@ namespace Web.Controllers
 
 		public async Task<IActionResult> Index()
 		{
-			await _genericRepository.ListAllAsync();
 			return View();
 		}
 	}
