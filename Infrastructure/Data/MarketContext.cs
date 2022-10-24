@@ -9,8 +9,8 @@ namespace Infrastructure.Data
 		public MarketContext(DbContextOptions<MarketContext> options) : base(options)
 		{
 		}
-		public DbSet<Shop> Clients { get; set; }
-		public DbSet<Shop> Orders { get; set; }
+		public DbSet<Client> Clients { get; set; }
+		public DbSet<Order> Orders { get; set; }
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Shop> Shops { get; set; }
 
