@@ -1,3 +1,4 @@
+using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +10,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 services.AddDbContext<MarketContext>(options =>
 	options.UseSqlServer(connectionString));
-
+services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 services.AddControllersWithViews();
 
 var app = builder.Build();

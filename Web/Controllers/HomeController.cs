@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Core.Entities;
+using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
 	public class HomeController : Controller
 	{
-		public HomeController()
+		private readonly IGenericRepository<Product> _genericRepository;
+		public HomeController(IGenericRepository<Product> genericRepository)
 		{
-			
+			_genericRepository = genericRepository;
 		}
 
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
+			await _genericRepository.ListAllAsync();
 			return View();
 		}
 	}

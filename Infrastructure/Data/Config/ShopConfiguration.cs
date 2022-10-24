@@ -10,7 +10,6 @@ namespace Infrastructure.Data.Config
 		{
 			builder.Property(d => d.Name).HasMaxLength(50).IsRequired();
 			builder.Property(d => d.Address).HasMaxLength(50).IsRequired();
-			builder.HasMany(d => d.Products).WithOne();
 		}
 	}
 }

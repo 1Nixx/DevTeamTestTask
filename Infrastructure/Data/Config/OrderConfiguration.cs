@@ -8,9 +8,7 @@ namespace Infrastructure.Data.Config
 	{
 		public void Configure(EntityTypeBuilder<Order> builder)
 		{
-			builder.Property(d => d.Status).IsRequired();
-			builder.HasOne(d => d.Client).WithMany();
-			builder.HasMany(d => d.Products).WithMany(d => d.Orders);
+			builder.Property(d => d.Status).IsRequired();			
 		}
 	}
 }
