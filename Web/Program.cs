@@ -1,6 +1,14 @@
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+services.AddDbContext<MarketContext>(options =>
+	options.UseSqlServer(connectionString));
 
 services.AddControllersWithViews();
 
