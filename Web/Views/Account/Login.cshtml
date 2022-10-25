@@ -1,0 +1,25 @@
+﻿@model Web.ViewModels.Account.LoginViewModel
+
+<div class="col-md-6 offset-md-3">
+	<form method="post" asp-controller="Account" asp-action="Login" class="mt-4 border p-4 bg-light shadow">
+		<h4 class="mb-5 text-secondary">Вход</h4>
+		<div class="row">
+			<div class="mb-3 col-md-6">
+				<label asp-for="Email">Email<span class="text-danger">*</span></label>
+				<input type="email" name="Email" asp-for="Email" class="form-control" placeholder="Введите Email">
+			</div>
+			<div class="mb-3 col-md-6">
+				<label asp-for="Password">Пароль<span class="text-danger">*</span></label>
+				<input type="password" name="Password" asp-for="Password" class="form-control" placeholder="Введите Пароль">
+			</div>
+			<div class="mb-3 col-md-6">
+				<input type="checkbox" asp-for="RememberMe" class="form-check-input" id="rememberMe" name="RememberMe" />
+				<label class="form-check-label" for="rememberMe">Запомнить меня</label>
+			</div>
+			<div class="validation" asp-validation-summary="All"></div>
+			<div class="col-md-6">
+				<button class="btn btn-primary btn-register-form float-end">Войти</button>
+			</div>
+		</div>
+	</form>
+</div>

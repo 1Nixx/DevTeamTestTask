@@ -1,0 +1,37 @@
+﻿@using Web.ViewModels.Account
+@model Web.ViewModels.Account.RegisterViewModel
+
+<div class="col-md-6 offset-md-3">
+	<form method="post" asp-controller="Account" asp-action="Register" class="mt-4 border p-4 bg-light shadow">
+		<h4 class="mb-5 text-secondary">Создайте ваш Аккаунт</h4>
+		<div class="row">
+			<div class="mb-3 col-md-6">
+				<label asp-for="UserName">Имя<span class="text-danger">*</span></label>
+				<input type="text" name="Name" asp-for="UserName" class="form-control" placeholder="Введите login">
+				<span asp-validation-for="UserName"></span>
+			</div>
+
+			<div class="mb-3 col-md-6">
+				<label asp-for="Email">Email<span class="text-danger">*</span></label>
+				<input type="email" name="Email" asp-for="Email" class="form-control" placeholder="Введите Email">
+			</div>
+
+			<div class="mb-3 col-md-6">
+				<label asp-for="Password">Пароль<span class="text-danger">*</span></label>
+				<input type="password" name="Password" asp-for="Password" class="form-control" placeholder="Введите Пароль">
+			</div>
+
+			<div class="mb-3 col-md-6">
+				<label asp-for="UserRole">Тип пользователя</label>
+				<select asp-for="UserRole" class="form-control" asp-items="Html.GetEnumSelectList<UserType>()">
+					<option>Select type ...</option>
+				</select>
+			</div>
+
+			<div class="validation" asp-validation-summary="All"></div>
+			<div class="col-md-12">
+				<button class="btn btn-primary btn-register-form float-end">Зарегистрироваться</button>
+			</div>
+		</div>
+	</form>
+</div>
