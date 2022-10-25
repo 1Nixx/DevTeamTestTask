@@ -34,6 +34,7 @@ services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddReact();
+services.AddSwaggerGen(); 
 services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
 services.AddControllersWithViews();
@@ -47,6 +48,8 @@ if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
 }
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

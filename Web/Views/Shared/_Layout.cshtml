@@ -24,7 +24,7 @@
                         }                       
                         <li class="nav-item">
                             <form method="post" asp-controller="Account" asp-action="Logout">
-                                <a class="nav-link">Выход</a>
+                                <button class="nav-link btn btn-outline-success" href="#">Выход</button>
                             </form>
                         </li>
                     }
@@ -45,11 +45,8 @@
         @RenderBody()
     </div>
 
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.11.0/umd/react-dom.development.js"></script>
-    <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/16.11.0/umd/react.development.js"></script>
-    <script>
-
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

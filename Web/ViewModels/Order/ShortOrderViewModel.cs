@@ -2,7 +2,7 @@
 {
     public class ShortOrderViewModel
     {
-        public int OrderId { get; set; }
+        public int Id { get; set; }
         public TypeOrderViewModel OrderType { get; set; }
     }
 

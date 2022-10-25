@@ -4,11 +4,15 @@ using Core.Interfaces;
 using Core.Specification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Xml.Linq;
 using Web.ViewModels.Order;
 
 namespace Web.Controllers
 {
-	[Authorize]
+	//[Authorize]
+	[Route("[controller]")]
 	public class OrderController : Controller
 	{
 		private readonly IGenericRepository<Order> _orderRepository;
@@ -19,6 +23,7 @@ namespace Web.Controllers
 			_mapper = mapper;
 		}
 
+		[HttpGet("")]
 		public IActionResult Index()
 		{
 			return View();
@@ -35,7 +40,7 @@ namespace Web.Controllers
 		}
 
 		[HttpGet("{id}")]
-		public async Task<ActionResult<OrderViewModel>> OrderByid(int id)
+		public async Task<ActionResult<OrderViewModel>> Order(int id)
 		{
 			var spec = new OrderFullInfo(id);
 
@@ -43,10 +48,10 @@ namespace Web.Controllers
 
 			if (order == null) return NotFound();
 
-			return _mapper.Map<Order, OrderViewModel>(order);
+			return View(_mapper.Map<Order, OrderViewModel>(order));
 		}
 
-		[Authorize("Admin")]
+		//[Authorize("Admin")]
 		[HttpPost("changestatus/{id:int}")]
 		public async Task<IActionResult> ChangeStatus(int id, TypeOrderViewModel newOrderStatus)
 		{
@@ -58,6 +63,29 @@ namespace Web.Controllers
 			await _orderRepository.SaveAsync();
 
 			return Ok();
+		}
+
+		[HttpGet("orderstatus")]
+		public ActionResult<List<OrderStatusName>> GetOrderStatus()
+		{
+			var list = new List<OrderStatusName>();
+
+			//var enumLength = Enum.GetNames(typeof(TypeOrderViewModel)).Length;
+
+			//for (int i = 0; i < enumLength; i++)
+			//	list.Add((i, ));
+
+			list.Add(new OrderStatusName{
+				id = 0,
+				StatusName = "Активные" 
+			});
+			list.Add(new OrderStatusName
+			{
+				id = 1,
+				StatusName = "Выполненные"
+			});
+
+			return Json(list);
 		}
 	}
 }

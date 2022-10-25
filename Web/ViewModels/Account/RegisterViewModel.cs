@@ -13,9 +13,9 @@ namespace Web.ViewModels.Account
     public enum UserType
     {
         [Display(Name = "Админ")]
-        Admin,
+        Admin = 0,
 
 		[Display(Name = "Курьер")]
-		Courier
+		Courier = 1
 	}
 }

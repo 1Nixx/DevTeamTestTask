@@ -11,7 +11,7 @@ namespace Core.Specification
 	{
 		public OrdersFilteredByStatus(OrderSpecParams productParams)
 			: base(x =>
-				productParams.ListType.HasValue && x.Status == productParams.ListType.Value)
+				(productParams.ListType.HasValue && x.Status == productParams.ListType.Value))
 		{
 
 		}

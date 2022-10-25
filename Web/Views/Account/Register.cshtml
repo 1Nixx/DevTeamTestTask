@@ -7,7 +7,7 @@
 		<div class="row">
 			<div class="mb-3 col-md-6">
 				<label asp-for="UserName">Имя<span class="text-danger">*</span></label>
-				<input type="text" name="Name" asp-for="UserName" class="form-control" placeholder="Введите login">
+				<input type="text" name="UserName" asp-for="UserName" class="form-control" placeholder="Введите login">
 				<span asp-validation-for="UserName"></span>
 			</div>
 
@@ -23,7 +23,7 @@
 
 			<div class="mb-3 col-md-6">
 				<label asp-for="UserRole">Тип пользователя</label>
-				<select asp-for="UserRole" class="form-control" asp-items="Html.GetEnumSelectList<UserType>()">
+				<select asp-for="UserRole" name="UserRole" class="form-control" asp-items="Html.GetEnumSelectList<UserType>()">
 					<option>Select type ...</option>
 				</select>
 			</div>
