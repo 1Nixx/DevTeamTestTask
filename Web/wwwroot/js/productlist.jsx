@@ -27,6 +27,7 @@
     render() {
         return (
             <div>
+                <span>Фильтрация по магазинам:   </span>
                 <select onChange={this.onSelectChange}>
                     <option>Все магазины</option>
                     {

@@ -27,6 +27,7 @@
     render() {
         return (
             <div>
+                <span>Фильтрация по статусу:   </span>
                 <select onChange={this.onSelectChange}>
                     <option>Все</option>
                     {

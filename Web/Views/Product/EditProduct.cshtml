@@ -1,7 +1,7 @@
-﻿@model Web.ViewModels.Product.ProductViewModel
+﻿@model Web.ViewModels.Product.ProductEditViewModel
 
 <div class="col-md-6 offset-md-3">
-	<form method="post" asp-controller="Product" asp-action="UpdateProduct">
+	<form method="post" asp-controller="Product" asp-action="EditProduct">
 		<h4 class="mb-5 text-secondary">Редактирование товара</h4>
 		<div class="row">
 			<div class="mb-3 col-md-6">
@@ -22,8 +22,8 @@
 			</div>
 			<hr/>
 			<div class="mb-3 col-md-6">
-				<label asp-for="Shop">Магазин</label>
-				<select asp-for="Shop" name="ShopId" class="form-control" id="shop-select"></select>
+				<label asp-for="ShopId">Магазин</label>
+				<select asp-for="ShopId" name="ShopId" class="form-control" id="shop-select"></select>
 			</div>
 			<div class="validation" asp-validation-summary="All"></div>
 			<div class="col-md-6">
@@ -36,6 +36,6 @@
 @section Scripts {
 	<script src="~/js/loadShopsSelect.js"></script>
 	<script>
-		LoadShops(@Model.Shop.Id);
+		LoadShops(@Model.ShopId);
 	</script>
 }

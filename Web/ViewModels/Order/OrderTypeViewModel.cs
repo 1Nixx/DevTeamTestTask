@@ -2,7 +2,7 @@
 
 namespace Web.ViewModels.Order
 {
-	public enum TypeOrderViewModel
+	public enum OrderTypeViewModel
 	{
 		Active = 0,		
 		Completed = 1

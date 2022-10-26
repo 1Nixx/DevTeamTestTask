@@ -1,8 +1,8 @@
 ﻿namespace Web.ViewModels.Order
 {
-    public class OrderStatusName
+    public class StatusNameViewModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public string StatusName { get; set; }
     }
 }

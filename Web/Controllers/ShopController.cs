@@ -20,11 +20,11 @@ namespace Web.Controllers
 		}
 
 		[HttpGet("all")]
-		public async Task<IReadOnlyList<ShopViewModel>> GetAllShops()
+		public async Task<IReadOnlyList<ShopShortViewModel>> GetAllShops()
 		{
 			var shops = await _shopRepository.ListAllAsync();
 
-			return _mapper.Map<IReadOnlyList<Shop>, IReadOnlyList<ShopViewModel>>(shops);
+			return _mapper.Map<IReadOnlyList<Shop>, IReadOnlyList<ShopShortViewModel>>(shops);
 		}
 	}
 }

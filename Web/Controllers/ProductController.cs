@@ -36,7 +36,7 @@ namespace Web.Controllers
 
 			if (product is null) return NotFound();
 			
-			return View(_mapper.Map<Product, ProductViewModel>(product));
+			return View(_mapper.Map<Product, ProductFullViewModel>(product));
 		}
 
 		[HttpGet("all")]
@@ -56,8 +56,11 @@ namespace Web.Controllers
 		}
 
 		[HttpPost("add")]
-		public async Task<IActionResult> AddNewProduct(ProductAddViewModel productToAdd)
+		public async Task<IActionResult> AddProduct(ProductAddViewModel productToAdd)
 		{
+			if (!ModelState.IsValid)
+				return View(productToAdd);
+
 			var product = _mapper.Map<ProductAddViewModel, Product>(productToAdd);
 
 			await _productRepository.AddAsync(product);
@@ -73,12 +76,15 @@ namespace Web.Controllers
 
 			var product = await _productRepository.GetEntityWithSpec(spec);
 
-			return View(_mapper.Map<Product, ProductViewModel>(product));
+			return View(_mapper.Map<Product, ProductEditViewModel>(product));
 		}
 
-		[HttpPost("edit")]
-		public async Task<IActionResult> UpdateProduct(ProductEditViewModel productToAdd)
+		[HttpPost("edit/{id}")]
+		public async Task<IActionResult> EditProduct(ProductEditViewModel productToAdd)
 		{
+			if (!ModelState.IsValid)
+				return View(productToAdd);
+
 			var product = _mapper.Map<ProductEditViewModel, Product>(productToAdd);
 
 			_productRepository.Update(product);
