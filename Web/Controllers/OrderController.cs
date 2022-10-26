@@ -11,7 +11,7 @@ using Web.ViewModels.Order;
 
 namespace Web.Controllers
 {
-	//[Authorize]
+	[Authorize]
 	[Route("[controller]")]
 	public class OrderController : Controller
 	{
@@ -51,8 +51,8 @@ namespace Web.Controllers
 			return View(_mapper.Map<Order, OrderViewModel>(order));
 		}
 
-		//[Authorize("Admin")]
-		[HttpPost("changestatus/{id:int}")]
+		[Authorize(Roles = "Admin")]
+		[HttpPost("changestatus/{id}")]
 		public async Task<IActionResult> ChangeStatus(int id, TypeOrderViewModel newOrderStatus)
 		{
 			var order = await _orderRepository.GetByIdAsync(id);

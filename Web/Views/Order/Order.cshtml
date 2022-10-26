@@ -1,17 +1,20 @@
 ﻿@model Web.ViewModels.Order.OrderViewModel
 
 <div>
+	<h3>Пользователь который заказал:</h3>
 	<p>Имя: @Model.User.Name</p>
 	<p>Адрес: @Model.User.Address</p>
 </div>
 <hr />
 
 <div>
+	<h3>Товары в заказе:</h3>
 	@foreach (var product in Model.Products)
 	{
 		<div>
 			<p>Имя: @product.Name</p>
 			<p>Цена: @product.Price</p>
+			<a href="@Url.ActionLink("Index", "Product", new { Id = product.ProductId })">Детали</a>
 		</div>
 		<hr />
 	}

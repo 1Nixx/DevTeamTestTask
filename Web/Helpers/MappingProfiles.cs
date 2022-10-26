@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Web.ViewModels.Order;
+using Web.ViewModels.Product;
 
 namespace Web.Helpers
 {

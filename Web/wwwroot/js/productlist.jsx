@@ -36,7 +36,7 @@
                         )
                     }
                 </select>
-            </div>    
+            </div>
         )
     }
 
@@ -57,7 +57,7 @@ class Order extends React.Component {
     render() {
         console.log("323 - " + this.props.status);
         return (
-            <div className={"h-50 w-75 m-3 text-light rounded-5 ps-3 p-2" + (this.props.status == 1 ? 'bg-secondary' : 'bg-primary' )}>
+            <div className={"h-50 w-75 m-3 text-light rounded-5 ps-3 p-2" + (this.props.status == 1 ? 'bg-secondary' : 'bg-primary')}>
                 <span>id: {this.props.id}  </span>
                 <span>Статус {this.props.status === 0 ? 'Выполнен' : 'Активный'}</span>
                 <button className="btn btn-danger ms-3" onClick={this.onStatusChange}>Выполнить задачу</button>
@@ -68,13 +68,13 @@ class Order extends React.Component {
 }
 
 
-class OrderList extends React.Component {
+class ProductList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             filter: 0,
-            orders: []
+            products: []
         };
         this.onFilterChange = this.onFilterChange.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -83,11 +83,11 @@ class OrderList extends React.Component {
     loadData() {
         var xhr = new XMLHttpRequest();
         console.log("ffff - " + this.state.filter);
-        xhr.open("get", `/order/all?ListType=${this.state.filter}`, true);
+        xhr.open("get", `/product/all?ShopId=${this.state.filter}`, true);
         xhr.onload = function () {
             var data = JSON.parse(xhr.responseText);
             console.log(data)
-            this.setState({ orders: data });
+            this.setState({ products: data });
         }.bind(this);
         xhr.send();
     }
@@ -115,20 +115,20 @@ class OrderList extends React.Component {
 
     render() {
         return (
-        <div className="mt-4">
-            < FilterOption onChange={this.onFilterChange} />
-            <hr />
-            <div className="mt-4 d-flex-column">
-                {
+            <div className="mt-4">
+                < FilterOption onChange={this.onFilterChange} />
+                <hr />
+                <div className="mt-4 d-flex-column">
+                    {
                         this.state.orders.map((order) =>
                             < Order key={order.id} id={order.id} status={order.ordertype} onStatusChange={this.onChange} />
                         )
-                }
-            </div>
-        </div>);
+                    }
+                </div>
+            </div>);
     }
 }
 ReactDOM.render(
-    < OrderList />,
-    document.getElementById("ordersection")
+    < ProductList />,
+    document.getElementById("productsection")
 );

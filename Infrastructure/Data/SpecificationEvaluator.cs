@@ -9,7 +9,7 @@ namespace Infrastructure.Data
 	{
 		public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> inputQuery, ISpecification<TEntity> spec)
 		{
-			var query = inputQuery;
+			var query = inputQuery;		
 
 			if (spec.Criteria is not null)
 			{

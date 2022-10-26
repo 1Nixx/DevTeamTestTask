@@ -1,1 +1,4 @@
-﻿<h1>ВЫ НЕ ВОШЛИ В СИСТЕМУ</h1>
+﻿@if (!User.Identity.IsAuthenticated)
+{
+	<h1>ВЫ НЕ ВОШЛИ В СИСТЕМУ</h1>
+}

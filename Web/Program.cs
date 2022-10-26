@@ -37,7 +37,7 @@ services.AddReact();
 services.AddSwaggerGen(); 
 services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
-services.AddControllersWithViews();
+services.AddMvc();
 
 var app = builder.Build();
 
@@ -55,7 +55,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseReact(config => { });
+app.UseReact(config => {});
 app.UseStaticFiles();
 
 app.UseRouting();

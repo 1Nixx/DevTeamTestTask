@@ -1,4 +1,6 @@
-﻿namespace Web.ViewModels.Order
+﻿using Web.ViewModels.Product;
+
+namespace Web.ViewModels.Order
 {
     public class OrderViewModel
     {
