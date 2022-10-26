@@ -8,7 +8,7 @@
 
     loadData() {
         var xhr = new XMLHttpRequest();
-        xhr.open("get", "/order/orderstatus", true);
+        xhr.open("get", "api/shop/all", true);
         xhr.onload = function () {
             var data = JSON.parse(xhr.responseText);
             this.setState({ options: data });
@@ -21,7 +21,6 @@
     }
 
     onSelectChange(ev) {
-        console.log(ev)
         this.props.onChange(ev.target.value)
     }
 
@@ -29,10 +28,10 @@
         return (
             <div>
                 <select onChange={this.onSelectChange}>
-                    <option>Все</option>
+                    <option>Все магазины</option>
                     {
                         this.state.options.map((option) =>
-                            <option key={option.id} value={option.id}>{option.statusName}</option>
+                            <option key={option.id} value={option.id}>{option.name}</option>
                         )
                     }
                 </select>
@@ -43,25 +42,30 @@
 
 }
 
-class Order extends React.Component {
+class Product extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onStatusChange = this.onStatusChange.bind(this);
+        this.onProductDelete = this.onProductDelete.bind(this)
     }
 
-    onStatusChange() {
-        this.props.onStatusChange(this.props.id, 1)
+    onProductDelete() {
+        this.props.onProductDelete(this.props.product.productId)
     }
 
     render() {
-        console.log("323 - " + this.props.status);
         return (
-            <div className={"h-50 w-75 m-3 text-light rounded-5 ps-3 p-2" + (this.props.status == 1 ? 'bg-secondary' : 'bg-primary')}>
-                <span>id: {this.props.id}  </span>
-                <span>Статус {this.props.status === 0 ? 'Выполнен' : 'Активный'}</span>
-                <button className="btn btn-danger ms-3" onClick={this.onStatusChange}>Выполнить задачу</button>
-                <a className="btn btn-success ms-3" href={"order/" + this.props.id}>Детали</a>
+            <div className="h-50 w-75 m-3 text-light rounded-5 ps-3 pe-3 p-2 d-flex justify-content-between align-items-center bg-secondary">
+                <div>
+                    <span>id: {this.props.product.productId}  </span>
+                    <span>  Название: {this.props.product.name}  </span>
+                    <span>  Цена: {this.props.product.price}  </span>
+                </div>
+                <div>
+                    <a className="btn btn-success ms-3" href={"product/edit/" + this.props.product.productId}>Редактировать</a>
+                    <button className="btn btn-danger ms-3" onClick={this.onProductDelete}>Удалить</button>
+                    <a className="btn btn-success ms-3" href={"product/" + this.props.product.productId}>Детали</a>
+                </div>
             </div>
         )
     }
@@ -73,23 +77,25 @@ class ProductList extends React.Component {
         super(props);
 
         this.state = {
-            filter: 0,
+            filter: "Все магазины",
             products: []
         };
         this.onFilterChange = this.onFilterChange.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.onDelete = this.onDelete.bind(this);
     }
 
     loadData() {
         var xhr = new XMLHttpRequest();
-        console.log("ffff - " + this.state.filter);
         xhr.open("get", `/product/all?ShopId=${this.state.filter}`, true);
         xhr.onload = function () {
             var data = JSON.parse(xhr.responseText);
-            console.log(data)
             this.setState({ products: data });
         }.bind(this);
         xhr.send();
+    }
+
+    componentDidMount() {
+        this.loadData();
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -98,14 +104,12 @@ class ProductList extends React.Component {
     }
 
     onFilterChange(filterId) {
-        console.log(filterId)
         this.setState({ filter: filterId });
     }
 
-    onChange(orderId, statusid) {
+    onDelete(productId) {
         var xhr = new XMLHttpRequest();
-        console.log("ffff - " + this.state.filter);
-        xhr.open("post", `/order/changestatus/${orderId}?newOrderStatus=${statusid}`, true);
+        xhr.open("delete", `/product/${productId}`, true);
         xhr.onload = function () {
             this.loadData();
         }.bind(this);
@@ -116,12 +120,15 @@ class ProductList extends React.Component {
     render() {
         return (
             <div className="mt-4">
-                < FilterOption onChange={this.onFilterChange} />
+                <div className="d-flex justify-content-between align-items-center w-75">
+                    < FilterOption onChange={this.onFilterChange} />
+                    <a className="btn btn-success" href="/product/add">Добавить продукт</a>
+                </div>
                 <hr />
                 <div className="mt-4 d-flex-column">
                     {
-                        this.state.orders.map((order) =>
-                            < Order key={order.id} id={order.id} status={order.ordertype} onStatusChange={this.onChange} />
+                        this.state.products.map((product) =>
+                            < Product key={product.productId} product={product} onProductDelete={this.onDelete} />
                         )
                     }
                 </div>

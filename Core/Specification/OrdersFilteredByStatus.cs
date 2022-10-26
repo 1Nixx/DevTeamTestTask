@@ -10,10 +10,10 @@ namespace Core.Specification
     public class OrdersFilteredByStatus : BaseSpecification<Order>
 	{
 		public OrdersFilteredByStatus(OrderSpecParams productParams)
-			: base(x =>
-				(productParams.ListType.HasValue && x.Status == productParams.ListType.Value))
+			: base()
 		{
-
+			if (productParams.ListType is not null)
+				AddCriteria(x => x.Status == productParams.ListType.Value);
 		}
 	}
 }

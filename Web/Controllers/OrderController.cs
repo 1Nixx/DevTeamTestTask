@@ -23,7 +23,7 @@ namespace Web.Controllers
 			_mapper = mapper;
 		}
 
-		[HttpGet("")]
+		[HttpGet]
 		public IActionResult Index()
 		{
 			return View();

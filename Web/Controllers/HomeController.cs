@@ -7,7 +7,14 @@ namespace Web.Controllers
 	{
 		public IActionResult Index()
 		{
+			if (User.Identity.IsAuthenticated)
+				return RedirectToAction("Index", "Order");
 			return View();
+		}
+
+		public IActionResult Error()
+		{ 
+			return View(); 
 		}
 	}
 }

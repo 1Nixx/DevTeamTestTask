@@ -3,6 +3,7 @@ using Infrastructure.Data;
 using Infrastructure.Identity;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using React.AspNet;
@@ -30,11 +31,17 @@ services.AddIdentity<IdentityUser, IdentityRole>(options =>
 	.AddEntityFrameworkStores<IdentityDbContext>()
 	.AddSignInManager<SignInManager<IdentityUser>>();
 
+services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+	 .AddCookie(options =>
+	 {
+		 options.LoginPath = "/Account/Login";
+	 });
+
 services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+services.AddSwaggerGen();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddReact();
-services.AddSwaggerGen(); 
 services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
 services.AddMvc();
@@ -55,7 +62,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
-app.UseReact(config => {});
+app.UseReact(config => { });
 app.UseStaticFiles();
 
 app.UseRouting();

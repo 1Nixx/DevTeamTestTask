@@ -21,7 +21,7 @@ namespace Web.Controllers
 			_mapper = mapper;	
 		}
 
-		[HttpGet("")]
+		[HttpGet]
 		public IActionResult Index()
 		{
 			return View();
@@ -52,7 +52,7 @@ namespace Web.Controllers
 		[HttpGet("add")]
 		public IActionResult AddProduct()
 		{
-			return View("AddEditProduct");
+			return View();
 		}
 
 		[HttpPost("add")]
@@ -63,17 +63,17 @@ namespace Web.Controllers
 			await _productRepository.AddAsync(product);
 			await _productRepository.SaveAsync();
 
-			return Ok();
+			return RedirectToAction("Index");
 		}
 
-		[HttpGet("edit")]
-		public async Task<IActionResult> EditProduc(int id)
+		[HttpGet("edit/{id}")]
+		public async Task<IActionResult> EditProduct(int id)
 		{
 			var spec = new ProductFullInfo(id);
 
 			var product = await _productRepository.GetEntityWithSpec(spec);
 
-			return View("AddEditProduct", _mapper.Map<Product, ProductViewModel>(product));
+			return View(_mapper.Map<Product, ProductViewModel>(product));
 		}
 
 		[HttpPost("edit")]
@@ -84,7 +84,7 @@ namespace Web.Controllers
 			_productRepository.Update(product);
 			await _productRepository.SaveAsync();
 
-			return Ok();
+			return RedirectToAction("Index");
 		}
 
 		[HttpDelete("{id}")]
@@ -92,7 +92,11 @@ namespace Web.Controllers
 		{
 			var product = await _productRepository.GetByIdAsync(id);
 
-			_productRepository.Delete(product);
+			if (product is null)
+				return NotFound();
+
+			product.IsDeleted = true;
+			_productRepository.Update(product);
 			await _productRepository.SaveAsync();
 
 			return Ok();

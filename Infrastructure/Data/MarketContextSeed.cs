@@ -6,7 +6,7 @@ namespace Infrastructure.Data
 	{
 		public static async Task SeedAsync(MarketContext context)
 		{
-			if (context.Clients.Any())
+			if (context.Orders.Any())
 				return;
 
 			await context.AddRangeAsync(new Shop
@@ -45,7 +45,7 @@ namespace Infrastructure.Data
 							{
 								Name = "Pila",
 								Price = 45.99M,
-								Color = "788845",
+								Color = "#788845",
 								IsDeleted = false,
 								Shop = shop1
 							},
@@ -53,7 +53,7 @@ namespace Infrastructure.Data
 							{
 								Name = "Pila #2",
 								Price = 1000.99M,
-								Color = "598648",
+								Color = "#598648",
 								IsDeleted = false,
 								Shop = shop1
 							}
@@ -79,7 +79,7 @@ namespace Infrastructure.Data
 							{
 								Name = "Test2",
 								Price = 1M,
-								Color = "956684",
+								Color = "#956684",
 								IsDeleted = false,
 								Shop = shop2
 							},
@@ -87,7 +87,7 @@ namespace Infrastructure.Data
 							{
 								Name = "Pila 34534",
 								Price = 111111.99M,
-								Color = "963255",
+								Color = "#963255",
 								IsDeleted = false,
 								Shop = shop1
 							},
@@ -108,7 +108,7 @@ namespace Infrastructure.Data
 					{
 						Name = "Test 56565",
 						Price = 5555M,
-						Color = "789456",
+						Color = "#789456",
 						IsDeleted = true,
 						Shop = context.Shops.Where(x => x.Name == "Shop #666").Select(s => s).FirstOrDefault()
 					},

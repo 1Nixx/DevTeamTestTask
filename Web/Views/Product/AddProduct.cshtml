@@ -1,0 +1,36 @@
+﻿@model Web.ViewModels.Product.ProductAddViewModel
+
+<div class="col-md-6 offset-md-3">
+	<form method="post" asp-controller="Product" asp-action="AddNewProduct">
+		<h4 class="mb-5 text-secondary">Редактирование товара</h4>
+		<div class="row">
+			<div class="mb-3 col-md-6">
+				<label asp-for="Name">Название</label>
+				<input type="text" name="Name" asp-for="Name" class="form-control" placeholder="Введите название">
+			</div>
+			<div class="mb-3 col-md-6">
+				<label asp-for="Price">Цена</label>
+				<input type="text" name="Price" asp-for="Price" class="form-control" placeholder="Введите цену">
+			</div>
+			<div class="mb-3 col-md-6">
+				<label asp-for="Color">Цвет</label>
+				<input type="color" name="Color" asp-for="Color" class="form-control">
+			</div>
+			<hr />
+			<div class="mb-3 col-md-6">
+				<label asp-for="ShopId">Магазин</label>
+				<select asp-for="ShopId" name="ShopId" class="form-control" id="shop-select"></select>
+			</div>
+			<div class="validation" asp-validation-summary="All"></div>
+			<div class="col-md-6">
+				<button class="btn btn-primary btn-register-form float-end">Добавить товар</button>
+			</div>
+		</div>
+	</form>
+</div>
+@section Scripts {
+	<script src="~/js/loadShopsSelect.js"></script>
+	<script>
+		LoadShops(-1);		
+	</script>
+}

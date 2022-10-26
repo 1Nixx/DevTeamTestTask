@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Web.ViewModels.Account;
 
@@ -29,7 +30,7 @@ namespace Web.Controllers
 				var user = new IdentityUser()
 				{
 					Email = model.Email,
-					UserName = model.Email
+					UserName = model.UserName
 				};
 
 				var result = await _userManager.CreateAsync(user, model.Password);
@@ -84,6 +85,13 @@ namespace Web.Controllers
 		{
 			await _signInManager.SignOutAsync();
 			return RedirectToAction("Index", "Home");
+		}
+
+		[Authorize]
+		[HttpGet("iAdmin")]
+		public ActionResult<bool> IsAdmin()
+		{
+			return Json(User.IsInRole("Admin"));
 		}
 	}
 }

@@ -1,1 +1,21 @@
 ﻿@model Web.ViewModels.Product.ProductViewModel
+
+<div>
+	<h3>Магазин:</h3>
+	<p>Название - @Model.Shop.Name</p>
+	<p>Адрес - @Model.Shop.Address</p>
+</div>
+<hr />
+
+<div>
+	<h3>Описание товара:</h3>
+	<p>Id - @Model.Id</p>
+	<p>Название - @Model.Name</p>
+	<p>Цена - @Model.Price</p>
+	<div class="d-flex">
+		<span>Цвет -</span>
+		<div class="ms-2" style="width: 20px; height: 20px; background-color: @Model.Color;"></div>	
+	</div>
+	
+</div>
+
