@@ -1,15 +1,8 @@
-﻿using Infrastructure.Data;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Identity
 {
-    public class IdentitySeed
+	public class IdentitySeed
     {
 		public static async Task SeedAsync(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
 		{

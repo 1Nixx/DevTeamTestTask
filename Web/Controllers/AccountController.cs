@@ -30,7 +30,7 @@ namespace Web.Controllers
 			var user = new IdentityUser()
 			{
 				Email = model.Email,
-				UserName = model.UserName
+				UserName = model.Email
 			};
 
 			var result = await _userManager.CreateAsync(user, model.Password);
@@ -43,9 +43,7 @@ namespace Web.Controllers
 			else
 			{
 				foreach (var error in result.Errors)
-				{
 					ModelState.AddModelError(string.Empty, error.Description);
-				}
 			}
 
 			return View(model);
@@ -58,13 +56,10 @@ namespace Web.Controllers
 		}
 
 		[HttpPost]
-		[ValidateAntiForgeryToken]
 		[InvalidModelFilter]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
-			var signedUser = await _userManager.FindByEmailAsync(model.Email);
-
-			var result = await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, false);
+			var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
 
 			if (result.Succeeded)
 				return RedirectToAction("Index", "Order");
@@ -74,8 +69,8 @@ namespace Web.Controllers
 			return View(model);
 		}
 
+		[Authorize]
 		[HttpPost]
-		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Logout()
 		{
 			await _signInManager.SignOutAsync();

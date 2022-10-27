@@ -8,7 +8,9 @@ using Web.Helpers;
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionStringIdentity = builder.Configuration.GetConnectionString("IdentityConnection");
 
 services.AddAutoMapper(typeof(MappingProfiles));
 
@@ -16,7 +18,7 @@ services.AddDbContext<MarketContext>(options =>
 	options.UseSqlServer(connectionString));
 
 services.AddDbContext<IdentityDbContext>(options =>
-	options.UseSqlServer(connectionString));
+	options.UseSqlServer(connectionStringIdentity));
 
 services.AddIdentityServices();
 services.AddApplicationServices();

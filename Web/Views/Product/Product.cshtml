@@ -1,10 +1,7 @@
 ﻿@model Web.ViewModels.Product.ProductFullViewModel
 
-<div>
-	<h3>Магазин:</h3>
-	<p>Название - @Model.Shop.Name</p>
-	<p>Адрес - @Model.Shop.Address</p>
-</div>
+<h3>Магазин:</h3>
+@await Html.PartialAsync("_ShopInfo", Model.Shop)
 <hr />
 
 <div>
@@ -14,7 +11,7 @@
 	<p>Цена - @Model.Price</p>
 	<div class="d-flex">
 		<span>Цвет -</span>
-		<div class="ms-2" style="width: 20px; height: 20px; background-color: @Model.Color;"></div>	
+		<div class="ms-2" style="width: 30px; height: 30px; background-color: @Model.Color;"></div>	
 	</div>
 	
 </div>

@@ -7,7 +7,7 @@ namespace Web.ViewModels.Order
     {
         public int OrderId { get; set; }
         public OrderTypeViewModel OrderType { get; set; }
-        public ClientViewModel User { get; set; }
+        public ClientViewModel Client { get; set; }
         public List<ProductShortViewModel> Products { get; set; }
     }
 }

@@ -1,20 +1,13 @@
 ﻿@model Web.ViewModels.Order.OrderFullViewModel
 
-<div>
-	<h3>Пользователь который заказал:</h3>
-	<p>Имя: @Model.User.Name</p>
-	<p>Адрес: @Model.User.Address</p>
-</div>
+<h3>Пользователь который заказал:</h3>
+@await Html.PartialAsync("_ClientInfo", Model.Client)
 <hr />
 
 <div>
 	<h3>Товары в заказе:</h3>
 	@foreach (var product in Model.Products)
 	{
-		<div>
-			<p>Имя: @product.Name</p>
-			<p>Цена: @product.Price</p>
-		</div>
-		<hr />
+		@await Html.PartialAsync("_ProductShortInfo", product)
 	}
 </div>

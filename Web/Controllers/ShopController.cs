@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Web.ViewModels.Shop;
 
@@ -13,6 +12,7 @@ namespace Web.Controllers
 	{
 		private readonly IShopService _shopService;
 		private readonly IMapper _mapper;
+
 		public ShopController(IShopService shopService, IMapper mapper)
 		{
 			_shopService = shopService;
