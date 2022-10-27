@@ -37,7 +37,7 @@ namespace Web.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<OrderFullViewModel>> Order(int id)
 		{
-			var order = await _orderService.GetOrderByIdASync(id);
+			var order = await _orderService.GetOrderByIdAsync(id);
 			if (order is null) return NotFound();
 
 			return View(_mapper.Map<Order, OrderFullViewModel>(order));
@@ -52,7 +52,7 @@ namespace Web.Controllers
 			{
 				await _orderService.UpdateOrderStatus(id, orderStatus);
 			}
-			catch (Exception)
+			catch (NullReferenceException)
 			{
 				return NotFound();
 			}

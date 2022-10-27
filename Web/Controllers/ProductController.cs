@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Specification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.Filters;
 using Web.ViewModels.Product;
 
 namespace Web.Controllers
@@ -52,11 +53,9 @@ namespace Web.Controllers
 		}
 
 		[HttpPost("add")]
+		[InvalidModelFilter]
 		public async Task<IActionResult> AddProduct(ProductAddViewModel productToAdd)
 		{
-			if (!ModelState.IsValid)
-				return View(productToAdd);
-
 			var product = _mapper.Map<ProductAddViewModel, Product>(productToAdd);
 			await _productService.AddProductAsync(product);
 
@@ -67,17 +66,16 @@ namespace Web.Controllers
 		public async Task<IActionResult> EditProduct(int id)
 		{
 			var product = await _productService.GetProductByIdAsync(id);
-			if (product is null) return NotFound();
+			if (product is null) 
+				return NotFound();
 
 			return View(_mapper.Map<Product, ProductEditViewModel>(product));
 		}
 
 		[HttpPost("edit/{id}")]
+		[InvalidModelFilter]
 		public async Task<IActionResult> EditProduct(ProductEditViewModel productToEdit)
 		{
-			if (!ModelState.IsValid)
-				return View(productToEdit);
-
 			var product = _mapper.Map<ProductEditViewModel, Product>(productToEdit);
 			await _productService.UpdateProductAsync(product);
 
@@ -91,7 +89,7 @@ namespace Web.Controllers
 			{
 				await _productService.DeleteProductAsync(id);
 			}
-			catch (Exception)
+			catch (NullReferenceException)
 			{
 				return NotFound();
 			}

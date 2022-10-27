@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Web.Filters;
 using Web.ViewModels.Account;
 
 namespace Web.Controllers
@@ -23,31 +24,30 @@ namespace Web.Controllers
 		}
 
 		[HttpPost]
+		[InvalidModelFilter]
 		public async Task<IActionResult> Register(RegisterViewModel model)
 		{
-			if (ModelState.IsValid)
+			var user = new IdentityUser()
 			{
-				var user = new IdentityUser()
-				{
-					Email = model.Email,
-					UserName = model.UserName
-				};
+				Email = model.Email,
+				UserName = model.UserName
+			};
 
-				var result = await _userManager.CreateAsync(user, model.Password);
-				if (result.Succeeded)
+			var result = await _userManager.CreateAsync(user, model.Password);
+			if (result.Succeeded)
+			{
+				await _userManager.AddToRoleAsync(user, model.UserRole.ToString());
+				await _signInManager.SignInAsync(user, false);
+				return RedirectToAction("Index", "Order");
+			}
+			else
+			{
+				foreach (var error in result.Errors)
 				{
-					await _userManager.AddToRoleAsync(user, model.UserRole.ToString());
-					await _signInManager.SignInAsync(user, false);
-					return RedirectToAction("Index", "Order");
-				}
-				else
-				{
-					foreach (var error in result.Errors)
-					{
-						ModelState.AddModelError(string.Empty, error.Description);
-					}
+					ModelState.AddModelError(string.Empty, error.Description);
 				}
 			}
+
 			return View(model);
 		}
 
@@ -59,23 +59,18 @@ namespace Web.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[InvalidModelFilter]
 		public async Task<IActionResult> Login(LoginViewModel model)
 		{
-			if (ModelState.IsValid)
-			{
-				var signedUser = await _userManager.FindByEmailAsync(model.Email);
-				var result =
-					await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, false);
-				if (result.Succeeded)
-				{
-					return RedirectToAction("Index", "Order");
-				}
-				else
-				{
+			var signedUser = await _userManager.FindByEmailAsync(model.Email);
 
-					ModelState.AddModelError("", "Неправильный логин и (или) пароль ");
-				}
-			}
+			var result = await _signInManager.PasswordSignInAsync(signedUser.UserName, model.Password, model.RememberMe, false);
+
+			if (result.Succeeded)
+				return RedirectToAction("Index", "Order");
+			else
+				ModelState.AddModelError("", "Неправильный логин и (или) пароль ");
+
 			return View(model);
 		}
 

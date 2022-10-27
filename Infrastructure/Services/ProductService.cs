@@ -14,7 +14,7 @@ namespace Infrastructure.Services
 
 		public async Task<Product> GetProductByIdAsync(int id)
 		{
-			var spec = new ProductFullInfo(id);
+			var spec = new ProductFullInfoById(id);
 			var product = await _productRepository.GetEntityWithSpec(spec);
 			return product;
 		}
@@ -43,7 +43,7 @@ namespace Infrastructure.Services
 			var product = await _productRepository.GetByIdAsync(id);
 
 			if (product is null)
-				throw new Exception();
+				throw new NullReferenceException();
 
 			product.IsDeleted = true;
 			_productRepository.Update(product);

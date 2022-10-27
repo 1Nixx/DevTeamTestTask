@@ -17,7 +17,7 @@ namespace Web.ViewModels.Product
 		public string Price { get; set; }
 
 		[Required]
-		[RegularExpression("#[0-9A-Fa-f]{6}$")]
+		[ColorValidator]
 		public string Color { get; set; }
 
 		[Required]

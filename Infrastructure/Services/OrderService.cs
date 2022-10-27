@@ -19,9 +19,9 @@ namespace Infrastructure.Services
 			return orders;
 		}
 
-		public async Task<Order> GetOrderByIdASync(int id)
+		public async Task<Order> GetOrderByIdAsync(int id)
 		{
-			var spec = new OrderFullInfo(id);
+			var spec = new OrderFullInfoById(id);
 			var order = await _orderRepository.GetEntityWithSpec(spec);
 			return order;
 		}
@@ -31,7 +31,7 @@ namespace Infrastructure.Services
 			var order = await _orderRepository.GetByIdAsync(id);
 
 			if (order is null)
-				throw new Exception();
+				throw new NullReferenceException();
 
 			order.Status = orderStatus;
 			_orderRepository.Update(order);

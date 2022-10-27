@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Services;
+using Web.Filters;
 
 namespace Web.Extensions
 {

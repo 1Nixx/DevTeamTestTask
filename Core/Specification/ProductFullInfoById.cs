@@ -2,9 +2,9 @@
 
 namespace Core.Specification
 {
-	public class ProductFullInfo : BaseSpecification<Product>
+	public class ProductFullInfoById : BaseSpecification<Product>
 	{
-		public ProductFullInfo(int id) : base(x => 
+		public ProductFullInfoById(int id) : base(x => 
 			x.Id == id)
 		{
 			AddInclude(x => x.Shop);
