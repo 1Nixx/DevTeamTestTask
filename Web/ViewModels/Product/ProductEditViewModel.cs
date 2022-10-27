@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Web.Validators;
+
 namespace Web.ViewModels.Product
 {
 	public class ProductEditViewModel
@@ -11,6 +13,7 @@ namespace Web.ViewModels.Product
 		public string Name { get; set; }
 
 		[Required]
+		[PriceValidator]
 		public string Price { get; set; }
 
 		[Required]

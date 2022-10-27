@@ -73,12 +73,12 @@ namespace Web.Controllers
 		}
 
 		[HttpPost("edit/{id}")]
-		public async Task<IActionResult> EditProduct(ProductEditViewModel productToAdd)
+		public async Task<IActionResult> EditProduct(ProductEditViewModel productToEdit)
 		{
 			if (!ModelState.IsValid)
-				return View(productToAdd);
+				return View(productToEdit);
 
-			var product = _mapper.Map<ProductEditViewModel, Product>(productToAdd);
+			var product = _mapper.Map<ProductEditViewModel, Product>(productToEdit);
 			await _productService.UpdateProductAsync(product);
 
 			return RedirectToAction("Index");

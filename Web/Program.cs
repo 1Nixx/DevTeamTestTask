@@ -1,13 +1,8 @@
-using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Identity;
-using Infrastructure.Services;
-using JavaScriptEngineSwitcher.ChakraCore;
-using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using React.AspNet;
+using Web.Extensions;
 using Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,55 +18,35 @@ services.AddDbContext<MarketContext>(options =>
 services.AddDbContext<IdentityDbContext>(options =>
 	options.UseSqlServer(connectionString));
 
-services.AddIdentity<IdentityUser, IdentityRole>(options =>
-	{
-		options.SignIn.RequireConfirmedAccount = false;
-		options.SignIn.RequireConfirmedEmail = false;
-		options.SignIn.RequireConfirmedPhoneNumber = false;
-	})
-	.AddEntityFrameworkStores<IdentityDbContext>()
-	.AddSignInManager<SignInManager<IdentityUser>>();
-
-services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-	 .AddCookie(options =>
-	 {
-		 options.LoginPath = "/Account/Login";
-	 });
-
-services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-services.AddScoped<IShopService, ShopService>();
-services.AddScoped<IOrderService, OrderService>();
-services.AddScoped<IProductService, ProductService>();
-
-
+services.AddIdentityServices();
+services.AddApplicationServices();
+services.AddReactServices();
 services.AddSwaggerGen();
-services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-services.AddReact();
-services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
-
 services.AddMvc();
 
 var app = builder.Build();
 
-await SeedDatabaseAsync();
-await SeedIdentityAsync();
+await app.UseDatabaseSeed();
 
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
 }
-app.UseSwagger();
-app.UseSwaggerUI();
+else
+{
+	app.UseDeveloperExceptionPage();
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
 
 app.UseReact(config => { });
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -79,24 +54,3 @@ app.MapControllerRoute(
 	pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-
-async Task SeedDatabaseAsync()
-{
-	using var scope = app.Services.CreateScope();
-	var services = scope.ServiceProvider;
-	var context = services.GetRequiredService<MarketContext>();
-	await context.Database.MigrateAsync();
-	await MarketContextSeed.SeedAsync(context);
-}
-
-async Task SeedIdentityAsync()
-{
-	using var scope = app.Services.CreateScope();
-	var services = scope.ServiceProvider;
-	var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
-	var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-	var identityContext = services.GetRequiredService<IdentityDbContext>();
-	await identityContext.Database.MigrateAsync();
-	await IdentitySeed.SeedAsync(userManager, roleManager);
-}

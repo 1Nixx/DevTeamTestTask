@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Web.Validators;
 
 namespace Web.ViewModels.Product
 {
@@ -9,7 +10,8 @@ namespace Web.ViewModels.Product
 		public string Name { get; set; }
 
 		[Required]
-		public decimal Price { get; set; }
+		[PriceValidator]
+		public string Price { get; set; }
 
 		[Required]
 		[RegularExpression("#[0-9A-Fa-f]{6}$")]
