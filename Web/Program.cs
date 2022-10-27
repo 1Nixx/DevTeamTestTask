@@ -1,6 +1,7 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Identity;
+using Infrastructure.Services;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -38,6 +39,10 @@ services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	 });
 
 services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+services.AddScoped<IShopService, ShopService>();
+services.AddScoped<IOrderService, OrderService>();
+services.AddScoped<IProductService, ProductService>();
+
 
 services.AddSwaggerGen();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

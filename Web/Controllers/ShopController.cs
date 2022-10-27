@@ -11,18 +11,18 @@ namespace Web.Controllers
 	[ApiController]
 	public class ShopController : ControllerBase
 	{
-		private readonly IGenericRepository<Shop> _shopRepository;
+		private readonly IShopService _shopService;
 		private readonly IMapper _mapper;
-		public ShopController(IGenericRepository<Shop> shopRepository, IMapper mapper)
+		public ShopController(IShopService shopService, IMapper mapper)
 		{
-			_shopRepository = shopRepository;
+			_shopService = shopService;
 			_mapper = mapper;
 		}
 
 		[HttpGet("all")]
 		public async Task<IReadOnlyList<ShopShortViewModel>> GetAllShops()
 		{
-			var shops = await _shopRepository.ListAllAsync();
+			var shops = await _shopService.GetAllShops();
 
 			return _mapper.Map<IReadOnlyList<Shop>, IReadOnlyList<ShopShortViewModel>>(shops);
 		}

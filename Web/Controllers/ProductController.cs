@@ -12,13 +12,13 @@ namespace Web.Controllers
 	[Route("[controller]")]
 	public class ProductController : Controller
 	{
-		private readonly IGenericRepository<Product> _productRepository;
+		private readonly IProductService _productService;
 		private readonly IMapper _mapper;
 
-		public ProductController(IGenericRepository<Product> productRepository, IMapper mapper)
+		public ProductController(IProductService productService, IMapper mapper)
 		{
-			_productRepository = productRepository;	
-			_mapper = mapper;	
+			_productService = productService;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
@@ -30,23 +30,19 @@ namespace Web.Controllers
 		[HttpGet("{id}")]
 		public async Task<IActionResult> Product(int id)
 		{
-			var spec = new ProductFullInfo(id);
+			var product = await _productService.GetProductByIdAsync(id);
+			if (product is null) 
+				return NotFound();
 
-			var product = await _productRepository.GetEntityWithSpec(spec);
-
-			if (product is null) return NotFound();
-			
 			return View(_mapper.Map<Product, ProductFullViewModel>(product));
 		}
 
 		[HttpGet("all")]
-		public async Task<IReadOnlyList<ProductShortViewModel>> GetAllProducts([FromQuery]ProductSpecParam specParam)
+		public async Task<IReadOnlyList<ProductShortViewModel>> GetAllProducts([FromQuery] ProductSpecParam specParam)
 		{
-			var spec = new ProductsFilteredByShop(specParam);
+			var products = await _productService.GetAllProductsAsync(specParam);
 
-			var products = await _productRepository.ListAsync(spec);
-
-			return _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductShortViewModel>>(products);		
+			return _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductShortViewModel>>(products);
 		}
 
 		[HttpGet("add")]
@@ -62,9 +58,7 @@ namespace Web.Controllers
 				return View(productToAdd);
 
 			var product = _mapper.Map<ProductAddViewModel, Product>(productToAdd);
-
-			await _productRepository.AddAsync(product);
-			await _productRepository.SaveAsync();
+			await _productService.AddProductAsync(product);
 
 			return RedirectToAction("Index");
 		}
@@ -72,9 +66,8 @@ namespace Web.Controllers
 		[HttpGet("edit/{id}")]
 		public async Task<IActionResult> EditProduct(int id)
 		{
-			var spec = new ProductFullInfo(id);
-
-			var product = await _productRepository.GetEntityWithSpec(spec);
+			var product = await _productService.GetProductByIdAsync(id);
+			if (product is null) return NotFound();
 
 			return View(_mapper.Map<Product, ProductEditViewModel>(product));
 		}
@@ -86,9 +79,7 @@ namespace Web.Controllers
 				return View(productToAdd);
 
 			var product = _mapper.Map<ProductEditViewModel, Product>(productToAdd);
-
-			_productRepository.Update(product);
-			await _productRepository.SaveAsync();
+			await _productService.UpdateProductAsync(product);
 
 			return RedirectToAction("Index");
 		}
@@ -96,15 +87,14 @@ namespace Web.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteProduct(int id)
 		{
-			var product = await _productRepository.GetByIdAsync(id);
-
-			if (product is null)
+			try
+			{
+				await _productService.DeleteProductAsync(id);
+			}
+			catch (Exception)
+			{
 				return NotFound();
-
-			product.IsDeleted = true;
-			_productRepository.Update(product);
-			await _productRepository.SaveAsync();
-
+			}
 			return Ok();
 		}
 	}

@@ -13,11 +13,11 @@ namespace Web.Controllers
 	[Route("[controller]")]
 	public class OrderController : Controller
 	{
-		private readonly IGenericRepository<Order> _orderRepository;
+		private readonly IOrderService _orderService;
 		private readonly IMapper _mapper;
-		public OrderController(IGenericRepository<Order> orderRepository, IMapper mapper)
+		public OrderController(IOrderService orderService, IMapper mapper)
 		{
-			_orderRepository = orderRepository;
+			_orderService = orderService;
 			_mapper = mapper;
 		}
 
@@ -28,23 +28,17 @@ namespace Web.Controllers
 		}
 
 		[HttpGet("all")]
-		public async Task<IReadOnlyList<OrderShortViewModel>> GetOrders([FromQuery]OrderSpecParams orderParams)
+		public async Task<IReadOnlyList<OrderShortViewModel>> GetOrders([FromQuery] OrderSpecParams orderParams)
 		{
-			var spec = new OrdersFilteredByStatus(orderParams);
-
-			var orders = await _orderRepository.ListAsync(spec);
-
+			var orders = await _orderService.GetAllOrdersAsync(orderParams);
 			return _mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderShortViewModel>>(orders);
 		}
 
 		[HttpGet("{id}")]
 		public async Task<ActionResult<OrderFullViewModel>> Order(int id)
 		{
-			var spec = new OrderFullInfo(id);
-
-			var order = await _orderRepository.GetEntityWithSpec(spec);
-
-			if (order == null) return NotFound();
+			var order = await _orderService.GetOrderByIdASync(id);
+			if (order is null) return NotFound();
 
 			return View(_mapper.Map<Order, OrderFullViewModel>(order));
 		}
@@ -53,13 +47,15 @@ namespace Web.Controllers
 		[HttpPost("changestatus/{id}")]
 		public async Task<IActionResult> ChangeStatus(int id, OrderTypeViewModel newOrderStatus)
 		{
-			var order = await _orderRepository.GetByIdAsync(id);
-
-			order.Status = _mapper.Map<OrderTypeViewModel, OrderStatus>(newOrderStatus);
-
-			_orderRepository.Update(order);
-			await _orderRepository.SaveAsync();
-
+			var orderStatus = _mapper.Map<OrderTypeViewModel, OrderStatus>(newOrderStatus);
+			try
+			{
+				await _orderService.UpdateOrderStatus(id, orderStatus);
+			}
+			catch (Exception)
+			{
+				return NotFound();
+			}
 			return Ok();
 		}
 
