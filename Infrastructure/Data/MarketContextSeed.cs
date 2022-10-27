@@ -116,6 +116,24 @@ namespace Infrastructure.Data
 				}
 			});
 
+			await context.AddAsync(new Order
+			{
+				Client = context.Clients.Where(x => x.Name == "Nikita Hripach").Select(s => s).FirstOrDefault(),
+				Products = new List<Product>()
+				{
+					new Product
+					{
+						Name = "Big toy",
+						Price = 5588.55M,
+						Color = "#88FF44",
+						IsDeleted = true,
+						Shop = context.Shops.Where(x => x.Name == "Shop #666").Select(s => s).FirstOrDefault()
+					},
+					context.Products.Where(x => x.Name == "Pila 34534").Select(s => s).FirstOrDefault()
+				},
+				Status = OrderStatus.Completed
+			});
+
 			await context.SaveChangesAsync();
 		}
 	}
